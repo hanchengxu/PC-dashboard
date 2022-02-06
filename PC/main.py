@@ -83,7 +83,7 @@ class Example(QWidget):
         self.targetPort = portList[1]
 
         if self.targetPort is not None:
-            self.trayIcon.showMessage('Dashboard', '已连接串口' + self.targetPort, icon=0)
+            self.trayIcon.showMessage('PC-Dashboard', '已连接串口' + self.targetPort, icon=0)
             self.statusAction.setIcon(QIcon('./imgs/link.png'))
             self.port_trans_thread.targetPort = self.targetPort
             self.port_trans_thread.start()
@@ -124,7 +124,7 @@ class Thread_GET_TARGET_PORT_AUTO(QThread):
     # 如果没有可用串口 第一位"无可用串口" 第二位None
     my_signal = pyqtSignal(list)
 
-    # 校验字符串
+    # 与下位机握手的校验字符串
     handshakeStr = 'handshake'
 
     # 连接的串口
@@ -156,12 +156,15 @@ class Thread_GET_TARGET_PORT_AUTO(QThread):
             for port in portList:
                 arduino = serial.Serial(port.name, baudrate=115200, timeout=.1)
                 data = self.handshake(arduino)
+                print(data.decode())
                 # 串口握手校验
                 if data.decode().strip() == self.handshakeStr:
                     self.my_signal.emit([port.name + "(已连接)", port.name])
                     self.target_port = port.name
                     arduino.close()
                     print(port.name + " is usable")
+                else:
+                    print(port.name + " can not use")
         else:
             # 没有任何串口
             print("no any port")
