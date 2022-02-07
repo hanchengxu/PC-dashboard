@@ -1,2 +1,10 @@
 
 PC/single_app.lock
+
+PC/__pycache__/
+
+PC/main.spec
+
+PC/build/
+
+PC/dist/
