@@ -2,6 +2,8 @@
 # 背景  <img loading="lazy" src="https://img.shields.io/badge/-Espressif-352e9b?'style'=flat&amp;logo=Espressif">  <img loading="lazy" src="https://img.shields.io/badge/-Arduino-352e9b?'style'=flat&amp;logo=Arduino">  <img loading="lazy" src="https://img.shields.io/badge/-Python-352e9b?'style'=flat&amp;logo=Python">  <img loading="lazy" src="https://img.shields.io/badge/-Windows-352e9b?'style'=flat&amp;logo=Windows">  
 
 
+<img src="https://github.com/hanchengxu/PC-dashboard/blob/master/inage.png?raw=true" width="500px" height="300px"/>  
+
 本家是来自ShaderFallback的[CpuRamGet](https://github.com/ShaderFallback/CpuRamGet)的项目。一个CPU&RAM物理监控表。  
 我Fork项目之后在软件层面重新写了一版。包括上位机和Esp32部分。 
 
