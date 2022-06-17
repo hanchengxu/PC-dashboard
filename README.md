@@ -1,10 +1,10 @@
 
 # 背景
 本家是来自ShaderFallback的[CpuRamGet](https://github.com/ShaderFallback/CpuRamGet)的项目。一个CPU&RAM物理监控表。  
-我Fork项目之后在软件层面重新写了一版。包括上位机和Esp32部分 
+我Fork项目之后在软件层面重新写了一版。包括上位机和Esp32部分。 
 
 因为我目前没有3D打印机，以及并不具备建模的能力，所以模型部分是自己再设计并用亚克力板切割组装而成。  
-表盘文件也源自于CpuRamGet项目，追加了自己喜欢的表看而已。 
+表盘文件也基于CpuRamGet项目并追加了Rick and Morty表盘。 
 
 这个Fork项目更多的是软件实现层面上的差异。
 
@@ -23,17 +23,20 @@
 并且使用Python后可以利用pyqt5来制作上位机图形界面，也比较容易。
 
 
-### 2.下位机(Esp32)
-下位机接收到文本数据后如何显示在电压表上,也与[CpuRamGet](https://github.com/ShaderFallback/CpuRamGet)稍微不同。  
-我使用了ledcwrite的PWM来处理信息的显示。  
+### 2.下位机
+下位机接收到文本数据后如何显示在电压表上,也与[CpuRamGet](https://github.com/ShaderFallback/CpuRamGet)稍微不同。   
 
-由于基于串口通信，不依赖wifi。理论上下位机可以替换成arduino uno等单片机。  
-但同样因为PWM的原因arduino与esp32写法存在差异，目前下位机代码只能在esp32上运行。
+下位机使用esp32芯片，使用串口通信与上位机进行交互。
+开发IDE为arduinoIDE。  
+CPU及RAM数值的显示利用了esp32的`ledcwrite`进行PWM。
 
-下一步再提供arduino uno版本。
+当然也提供了arduino开发板的版本，在arduino里使用`analogWrite`进行信息的处理。
+
+下位机文件在/board/
+
 
 ## 开发指南
-### 上位机
+### 1.上位机
 上位机采用python开发，图形库为pyqt5。开发IDE为vscode。
 #### 启动
 1. `cd PC` 进入上位机文件夹
@@ -53,7 +56,27 @@ pyrcc5 resource.qrc -o resource.py
 ```
 self.searchManualAction.setIcon(QIcon(':/imgs/checked.png'))
 ```
-### 下位机(ESP32)  
-下位机使用esp32芯片，使用串口通信与上位机进行交互。
-开发IDE为arduinoIDE。  
-CPU及RAM数值的显示利用了esp32的`ledcwrite`进行PWM
+#### 打包可执行exe文件
+目前只在windows10 64位机上测试过
+```
+pyinstaller -F main.py -i ./icon.ico --noconsole
+```
+解决windows10打包后图标缓存
+```
+ie4uinit.exe -show
+```
+### 2.下位机
+
+通过串口接受到数据，下位机采用PWM的方式控制电压表，由于没有使用Wifi传输
+数据，这使得我们可以使用arduino uno等开发板。下位机文件夹里提供了esp32和
+arduino的不同实现。
+
+核心区别就是esp32使用了ledcWrite而arduino uno使用的是analogWrite函数。
+
+### ⚠️串口驱动
+
+⚠️初次使用Esp32在电脑上连接的时候，如果扫描不到串口，需要安装串口驱动。⚠️  
+(驱动地址)[https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers]  
+安装这个驱动: CP210x Windows Drivers with Serial Enumerator
+
+😭看来使用串口方式还是直接用arduino开发板才能即插即用。唉，心累。
